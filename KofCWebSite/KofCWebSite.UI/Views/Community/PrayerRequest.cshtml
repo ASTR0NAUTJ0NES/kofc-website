@@ -1,0 +1,87 @@
+@model KofCWebSite.Core.Models.PrayerRequestViewModel
+@if (!string.IsNullOrWhiteSpace(Model.AlertMessage))
+{
+    <div id="alertRow" class="row">
+        <div class="col-md-10">
+            <p class="alert alert-primary">@Model.AlertMessage</p>
+        </div>
+    </div>
+}
+<head>
+     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<div class="section-header wow fadeInRight" style="visibility:hidden;">
+    <h2><span class="fa fa-praying-hands"></span> @Model.Title</h2>
+</div>
+
+<section id="team" class="wow fadeInUpBig" style="padding-top:0px; margin-bottom:54px; visibility:hidden;">
+    <form name="formSubmitAPrayerRequest" asp-controller="Community" asp-action="PrayerRequest" method="post">
+        
+        <input type="hidden" asp-for="ReCaptchaSiteKey" />
+        <input type="hidden" class="gc-response" asp-for="ReCaptchaResponse" />
+        <div class="row" style="padding:0;">
+            <div class="card-box-kofc col-lg-12 card shadow">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <div class="col-sm-6" style="float:left">
+                            <input asp-for="PrayerRequest.FirstName" class="form-control" placeholder="First Name" type="text" />
+                            <span asp-validation-for="PrayerRequest.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-6" style="float:right">
+                            <input asp-for="PrayerRequest.LastName" class="form-control" placeholder="Last Name" type="text" />
+                            <span asp-validation-for="PrayerRequest.LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4" style="float:left">
+                            <input asp-for="PrayerRequest.Phone" class="form-control" placeholder="Phone" type="text" />
+                            <span asp-validation-for="PrayerRequest.Phone" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-8" style="float:right">
+                            <input asp-for="PrayerRequest.Email" class="form-control" placeholder="Email" type="text" />
+                            <span asp-validation-for="PrayerRequest.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9" style="float:left">
+                            <textarea asp-for="PrayerRequest.RequestDetail" rows="7" class="form-control" placeholder="Request Detail"></textarea>
+                            <span asp-validation-for="PrayerRequest.RequestDetail" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-3" style="float:right;height:50px;line-height:32px;padding-top:26px">
+                            <label id="urgent-toggle" class="switch">
+                                <input type="checkbox" @(Model.PrayerRequest.Urgent ? "checked" : "") />
+                                <span class="slider round"></span>
+                            </label>
+                            <label for="urgent-toggle">Flag Request as Urgent</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer card-text">
+                    <div style="float:left;width:60%;height:100%;text-align:left">
+                        <div class="g-recaptcha" data-sitekey="6LdO2OQUAAAAADb3Nim540MD-o81QEZ5UxTGkgDe" data-callback="gcCallBack"></div>
+                    </div>
+                    <div style="float:right;width:39%;height:100%;line-height:100%;">
+                        <div style="float:right;height:100%;line-height:100%;">
+                            <a class="btn btn-secondary" asp-action="Index" asp-controller="Home"><span class="fa fa-fast-backward"></span> Cancel Request</a>
+                            <button id="btnSubmit" class="btn btn-success" type="submit"><span class="fa fa-save"></span> Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        $("#alertRow").fadeOut(5000);
+    });
+
+    var gcCallBack = function (response) {
+        $(".gc-response").val(response);
+    };
+    </script>
+}

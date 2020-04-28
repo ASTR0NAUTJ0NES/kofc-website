@@ -1,0 +1,105 @@
+@model KofCWebSite.Core.Models.ContactsListViewModel
+@using jQWidgets.AspNetCore.Mvc.TagHelpers;
+
+@{ var Contact = Model.Contacts.FirstOrDefault();}
+    <div class="section-header wow fadeInRight" style="visibility:hidden;">
+        <h2><span class="fa fa-address-card"></span> @Model.Title</h2>
+    </div>
+<a class="btn btn-sm btn-primary" asp-controller="Contacts" asp-action="Create">
+    <span class="fa fa-plus"></span>&nbsp; Create New Contact
+</a>
+<hr />
+
+<section style="margin-bottom:54px;">
+    <jqx-grid id="gridcontacts" auto-height="true" width="100%" server-processing="true"
+              alt-rows="true" pageable="true" theme="material" filterable="false" auto-row-height="true"
+              selection-mode="none" enable-hover="false" sortable="false" editable="false" show-status-bar="true" show-tool-bar="true"
+              columns-auto-resize="true"
+              page-size="10" page-size-options="@(new List<string>() { "4", "5", "10"})" source-id="Id"
+              source-total-records="TotalRecords"
+              source-url="@Url.Action("GetJqPageData","Contacts")" source-root="Contacts" source-model="Contact">
+
+        <jqx-grid-columns>
+            <jqx-grid-column datafield-for="@(Contact.Id)" sortable="false" width="30px" text="Id"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Contact.Firstname)" sortable="false" width="auto" text="First"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Contact.Middlename)" sortable="false" width="auto" text="Middle"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Contact.Lastname)" sortable="false" width="auto" text="Last"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Contact.Suffix)" sortable="false" width="40px" text="Suffix"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Contact.Occupation)" sortable="false" width="auto" text="Occupation"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Contact.Email)" sortable="false" width="120px" text="Email"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Contact.FormattedDateOfBirth)" sortable="true" width="auto" text="Birthdate"></jqx-grid-column>
+            @if (Model.ShowAdminButtons)
+            {
+                <jqx-grid-column column-type="custom" cells-renderer=BtnCellsRenderer() width="auto" text="Actions"></jqx-grid-column>
+            }
+        </jqx-grid-columns>
+    </jqx-grid>
+</section>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="ConfirmRemoval" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">Confirm Removal</div>
+            <div class="modal-body"> </div>
+            <div class="modal-footer">
+                <button id="btnDeleteCancel" type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-undo"></span> Cancel</button>
+                <a id="btnDeleteGo" class="btn btn-warning btn-ok" data-dismiss="modal"><span class="fa fa-minus-square"></span> Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function OnEditClick(id, name) {
+            window.location = "/Contacts/Edit/" + id;
+        }
+
+        function OnDetailsClick(id) {
+            window.location = "/Contacts/Details/" + id;
+        }
+
+        function OnDetailsClick(id) {
+            window.location = "/Contacts/Details/" + id;
+        }
+
+        function OnRemoveClick(id, name) {
+            
+            $("#confirm-delete").find(".modal-body").html(`Are you sure you want to remove contact ${name.trim()}?`);
+            $("#confirm-delete").modal({
+                backdrop: 'static'
+            })
+                .on('click', '#btnDeleteGo', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        async:false,
+                        method: "POST",
+                        url: "/Contacts/DeleteById",
+                        data: { "ContactId": id },
+                        complete: function (data) {
+                            location.reload();
+                        },
+                        dataType: "application/json"
+                    });
+                });           
+        }
+
+        function BtnCellsRenderer(row) {
+            var data = $('#gridcontacts').jqxGrid('getrowdata', row);
+            var id = data.Id;
+
+            var mn = data.Middlename != null ? " " + data.Middlename : "";
+            var sfx = data.Suffix != null ? " " + data.Suffix : "";
+            var contactName = data.Firstname + mn + " " + data.Lastname + sfx;
+            var classViewBtn = "btn btn-sm btn-info btn-jqxgrid-input-sm";
+            var classEditBtn = "btn btn-sm btn-primary btn-jqxgrid-input-sm";
+            var classDelBtn = "btn btn-sm btn-warning btn-jqxgrid-input-sm";
+            btnView = `<button onclick="OnDetailsClick(${id})" class='${classViewBtn}' data-toggle="tooltip" title="View Contact"><span class='fa fa-eye'></span></button>`;
+            btnEdit = `<button onclick="OnEditClick(${id}, '${contactName}')" class='${classEditBtn}' data-toggle="tooltip" title="Edit Contact"><span class='fa fa-edit'></span></button>`;
+            btnSeparator = "&nbsp;&nbsp;";
+            btnDelete = `<button onclick="OnRemoveClick(${id}, '${contactName}')" class='${classDelBtn}' data-toggle="tooltip" title="Delete Contact"><span class='fa fa-ban'></span></button>`;
+            newVal = btnSeparator + btnView + btnSeparator + btnEdit + btnSeparator + btnDelete;
+            return newVal;
+        }
+    </script>
+}

@@ -1,0 +1,18 @@
+@model KofCWebSite.Core.Models.NewsItemDetailsViewModel
+
+<div class="alert alert-light shadow section-header" style="margin-top:40px;margin-bottom:54px;">
+    <div class="text-dark">
+        <h3 style="font-weight:700;">@Model.NewsItem.Headline</h3>
+        <h6>
+            @{
+                if (Model.NewsItem.FormattedPublishStart != "")
+                {
+                    @Model.NewsItem.FormattedPublishStart
+                    <span>&nbsp;|&nbsp;</span>
+                }
+            }
+            @Model.NewsItem.AuthorFullName
+        </h6>
+        <p>@Model.NewsItem.Article</p>
+    </div>
+</div>

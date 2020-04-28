@@ -1,0 +1,105 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site-bundle.min.css",
+    "inputFiles": [
+      "lib/bootstrap/dist/css/bootstrap.css",
+      "lib/ionicons/css/ionicons.css",
+      "wwwroot/lib/fontawesome/css/all.css",
+      "lib/reveal-theme/css/styles.min.css",
+      "lib/toggle.css",
+      "lib/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/fontawesome.min.css",
+    "inputFiles": [
+      "wwwroot/lib/fontawesome/css/all.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/reveal.min.css",
+    "inputFiles": [
+      "lib/magnific-popup/magnific-popup.css",
+      "lib/reveal-theme/animate/animate.css",
+      "lib/owlcarousel/assets/owl.carousel.css",
+      "lib/owlcarousel/assets/owl.theme.default.css",
+      "lib/reveal-theme/styles.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/jqx.min.css",
+    "inputFiles": [
+      "lib/jqwidgets/styles/jqx.base.css",
+      "lib/jqwidgets/styles/jqx.light.css",
+      "lib/jqwidgets/styles/jqx.arctic.css",
+      "lib/jqwidgets/styles/jqx.material.css",
+      "lib/jqwidgets/styles/jqx.bootstrap.css",
+      "lib/jqwidgets/styles/jqx.web.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/reveal.min.js",
+    "inputFiles": [
+      "lib/magnific-popup/magnific-popup.js",
+      "lib/owlcarousel/owl.carousel.js",
+      "lib/reveal-theme/easing/easing.js",
+      "lib/reveal-theme/sticky/sticky.js",
+      "lib/reveal-theme/superfish/hoverIntent.js",
+      "lib/reveal-theme/superfish/superfish.js",
+      "lib/reveal-theme/wow/wow.js",
+      "lib/reveal-theme/js/main.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site-bundle.min.js",
+    "inputFiles": [
+        "lib/jquery/dist/jquery.js",
+        "lib/jquery/dist/jquery-migrate.min.js",
+        "lib/jquery/dist/jquery.form.min.js",
+        "lib/jquery-validation/dist/jquery.validate.js",
+        "lib/jquery-validation/dist/additional-methods.js",
+        "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
+        "wwwroot/lib/fontawesome/js/all.js",
+        "lib/bootstrap/dist/js/bootstrap.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/jqx.min.js",
+    "inputFiles": [
+      "lib/jqwidgets/jqxcore.js",
+      "lib/jqwidgets/jqxdata.js",
+      "lib/jqwidgets/jqxbuttons.js",
+      "lib/jqwidgets/jqxscrollbar.js",
+      "lib/jqwidgets/jqxgrid.js",
+      "lib/jqwidgets/jqxgrid.edit.js",
+      "lib/jqwidgets/jqxgrid.columnsresize.js",
+      "lib/jqwidgets/jqxgrid.filter.js",
+      "lib/jqwidgets/jqxgrid.selection.js",
+      "lib/jqwidgets/jqxgrid.sort.js",
+      "lib/jqwidgets/jqxgrid.pager.js",
+      "lib/jqwidgets/jqxgrid.aggregates.js",
+      "lib/jqwidgets/jqxgrid.grouping.js",
+      "lib/jqwidgets/jqxmenu.js",
+      "lib/jqwidgets/jqxlistbox.js",
+      "lib/jqwidgets/jqxdropdownlist.js",
+      "lib/jqwidgets/jqxinput.js",
+      "lib/jqwidgets/jqxeditor.js",
+      "lib/jqwidgets/jqxformattedinput.js",
+      "lib/jqwidgets/jqxmaskedinput.js",
+      "lib/jqwidgets/jqxdate.js",
+      "lib/jqwidgets/jqxfileupload.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  }
+]

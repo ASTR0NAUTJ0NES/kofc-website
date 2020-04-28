@@ -1,0 +1,71 @@
+@model KofCWebSite.Core.Models.NewsletterListViewModel
+@using jQWidgets.AspNetCore.Mvc.TagHelpers;
+
+    <div class="section-header wow fadeInRight" style="visibility:hidden;">
+        <h2><span class="fa fa-newspaper"></span> Newsletters</h2>
+    </div>
+
+@if (Model.IsAdmin || Model.IsContributor)
+{
+    <a class="btn btn-sm btn-primary" asp-controller="Newsletters" asp-action="Create">
+        <span class="fa fa-plus"></span>&nbsp; Upload Newsletter
+    </a>
+}
+<hr />
+<section style="margin-bottom:54px;">
+    @foreach (var nl in Model.Newsletters)
+    {
+        <div class="alert alert-light shadow">
+                <input type="hidden" value="@nl.Id" name="Id" />
+                <span class="far fa-file-pdf fa-2x text-danger" style="font-size:calc(20px + 0.6vw)"></span>&nbsp;
+                <a target="_blank" style="font-size:calc(12px + 0.3vw);" asp-controller="Newsletters" asp-action="Download" asp-route-id="@nl.Id">@nl.Filename</a>
+                @if (Model.IsAdmin || Model.IsContributor)
+                {
+                    <button class="btn btn-sm btn-danger" onclick="OnRemoveClick('@nl.Id', '@nl.Filename')" style="float:right;" data-toggle="tooltip" title="Delete Newsletter"><span class='fa fa-ban'></span> Delete</button>
+                    <a class="btn btn-sm btn-primary" asp-route-id="@nl.Id" asp-controller="Newsletters" asp-action="Edit" style="float:right;margin-right:5px;" data-toggle="tooltip" title="Edit Newsletter"><span class='fa fa-edit'></span> Edit</a>
+                }
+            <hr />
+            <div style="width:100%;overflow-wrap:break-word;font-size:calc(12px + 0.3vw)">@nl.Description</div>
+        </div>
+    }
+</section>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="ConfirmRemoval" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">Confirm Removal</div>
+            <div class="modal-body"> </div>
+            <div class="modal-footer">
+                <button id="btnDeleteCancel" type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-undo"></span> Cancel</button>
+                <a id="btnDeleteGo" class="btn btn-warning btn-ok" data-dismiss="modal"><span class="fa fa-minus-square"></span> Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function OnRemoveClick(id, name) {
+
+        $("#btnDeleteGo").on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "/Newsletters/DeleteById/" + id,
+                method: "get",
+                success: function (deleteResult) {
+                    console.log(deleteResult);
+                    if (deleteResult.resultMessage === "success") {
+                        location.reload();
+                    } else {
+                        alert("Error removing newsletter.");
+                    }
+                }
+            });
+        });
+        $("#confirm-delete").find(".modal-body").html(`Are you sure you want to remove newsletter ${name.trim()}?`);
+        $("#confirm-delete").modal({
+            backdrop: 'static'
+        });
+    }
+</script>
+}

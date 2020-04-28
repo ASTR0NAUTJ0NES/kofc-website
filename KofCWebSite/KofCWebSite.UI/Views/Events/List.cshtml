@@ -1,0 +1,111 @@
+@model KofCWebSite.Core.Models.EventsListViewModel
+@using jQWidgets.AspNetCore.Mvc.TagHelpers;
+
+@{ var Event = Model.Events.FirstOrDefault();}
+    <div class="section-header wow fadeInRight" style="visibility:hidden;">
+        <h2><span class="fa fa-address-card"></span> @Model.Title</h2>
+    </div>
+<a class="btn btn-sm btn-primary" asp-controller="Events" asp-action="Create">
+    <span class="fa fa-plus"></span>&nbsp; Create New Event
+</a>
+<hr />
+
+<section style="margin-bottom:54px;">
+    <jqx-grid id="gridevents" auto-height="true" width="100%" server-processing="true"
+              alt-rows="true" pageable="true" theme="material" filterable="false" auto-row-height="true"
+              selection-mode="none"  enable-hover="false" sortable="false" editable="false" show-status-bar="true" show-tool-bar="true"
+              columns-auto-resize="true"
+              page-size="10" page-size-options="@(new List<string>() { "4", "5", "10"})" source-id="Id"
+              source-total-records="TotalRecords"
+              source-url="@Url.Action("GetJqPageData","Events")" source-root="Events" source-model="Event">
+
+        <jqx-grid-columns>
+            <jqx-grid-column datafield-for="@(Event.Id)" sortable="false" width="30px" text="Id"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Event.Title)" sortable="false" width="auto" text="Title"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Event.EventStart)" sortable="false" width="80px" text="Event Start" cells-format="MM/dd/yyyy"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Event.EventEnd)" sortable="false" width="80px" text="Event End" cells-format="MM/dd/yyyy"></jqx-grid-column>
+            <jqx-grid-column datafield-for="@(Event.Contact)" cells-renderer="OrganizerRenderer()" sortable="false" width="200px" text="Organizer"></jqx-grid-column>
+            @if (Model.ShowAdminButtons)
+            {
+                <jqx-grid-column column-type="custom" cells-renderer=BtnCellsRenderer() width="auto" text="Actions"></jqx-grid-column>
+            }
+        </jqx-grid-columns>
+    </jqx-grid>
+</section>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="ConfirmRemoval" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">Confirm Removal</div>
+            <div class="modal-body"> </div>
+            <div class="modal-footer">
+                <button id="btnDeleteCancel" type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-undo"></span> Cancel</button>
+                <a id="btnDeleteGo" class="btn btn-warning btn-ok" data-dismiss="modal"><span class="fa fa-minus-square"></span> Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function OnEditClick(id, name) {
+            window.location = "/Events/Edit/" + id;
+        }
+
+        function OnDetailsClick(id) {
+            window.location = "/Events/Details/" + id;
+        }
+
+        function OnDetailsClick(id) {
+            window.location = "/Events/Details/" + id;
+        }
+
+        function OnRemoveClick(id, name) {
+
+            $("#confirm-delete").find(".modal-body").html(`Are you sure you want to remove Event ${name.trim()}?`);
+            $("#confirm-delete").modal({
+                backdrop: 'static'
+            })
+                .on('click', '#btnDeleteGo', function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        async:false,
+                        method: "POST",
+                        url: "/Events/DeleteById",
+                        data: { "EventId": id },
+                        complete: function (data) {
+                            location.reload();
+                        },
+                        dataType: "application/json"
+                    });
+                });
+        }
+
+        function OrganizerRenderer(row, columnfield) {
+            var data = $('#gridevents').jqxGrid('getrowdata', row);
+            if (data.Contact != null && data.Contact != undefined) {
+                var mn = data.Contact.Middlename != null ? " " + data.Contact.Middlename : "";
+                var sfx = data.Contact.Suffix != null ? " " + data.Contact.Suffix : "";
+                var organizerName = data.Contact.Firstname + mn + " " + data.Contact.Lastname + sfx;
+                return '<div style="line-height:2.3em;padding-left:4px;">' + organizerName + '</div>';
+            }
+            return "";
+        }
+
+        function BtnCellsRenderer(row) {
+            var data = $('#gridevents').jqxGrid('getrowdata', row);
+            var id = data.Id;
+
+            var eventTitle = data.Title;
+            var classViewBtn = "btn btn-sm btn-info btn-jqxgrid-input-sm";
+            var classEditBtn = "btn btn-sm btn-primary btn-jqxgrid-input-sm";
+            var classDelBtn = "btn btn-sm btn-warning btn-jqxgrid-input-sm";
+            btnView = `<button onclick="OnDetailsClick(${id})" class='${classViewBtn}' data-toggle="tooltip" title="View Event"><span class='fa fa-eye'></span></button>`;
+            btnEdit = `<button onclick="OnEditClick(${id}, '${eventTitle}')" class='${classEditBtn}' data-toggle="tooltip" title="Edit Event"><span class='fa fa-edit'></span></button>`;
+            btnSeparator = "&nbsp;&nbsp;";
+            btnDelete = `<button onclick="OnRemoveClick(${id}, '${eventTitle}')" class='${classDelBtn}' data-toggle="tooltip" title="Delete Event"><span class='fa fa-ban'></span></button>`;
+            newVal = btnSeparator + btnView + btnSeparator + btnEdit + btnSeparator + btnDelete;
+            return newVal;
+        }
+    </script>
+}

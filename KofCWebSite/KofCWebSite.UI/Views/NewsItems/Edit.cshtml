@@ -1,0 +1,95 @@
+@model KofCWebSite.Core.Models.NewsItemEditViewModel
+@{
+    ViewData["Title"] = "Edit News Item";
+    string alertMsg = Model.AlertMessage ?? "";
+}
+
+@if (alertMsg != "")
+{
+    <div id="alertRow" class="row">
+        <div class="col-md-10">
+            <p class="alert alert-primary">@alertMsg</p>
+        </div>
+    </div>
+}
+
+<div class="section-header wow fadeInRight" style="visibility:hidden;">
+    <h2><span class="fa fa-file-alt"></span> @Model.Title</h2>
+</div>
+
+<section id="team" class="wow fadeInUpBig" style="padding-top:0px; margin-bottom:54px;visibility:hidden;">
+    <form name="formEditANewsItem" asp-controller="NewsItems" asp-action="Edit" method="post">
+        <div class="row" style="padding:0;">
+            <div class="card-box-kofc col-lg-12 card shadow">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-padding" style="float:left;">
+                            <label asp-for="AuthorFirstName" class="col-form-label">Author</label>
+                            <input asp-for="AuthorFirstName" class="form-control" placeholder="First Name" type="text" />
+                            <span asp-validation-for="AuthorFirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-3 col-sm-padding" style="float:left">
+                            <label asp-for="AuthorMiddleName" class="col-form-label">&nbsp;</label>
+                            <input asp-for="AuthorMiddleName" class="form-control" placeholder="Middle Name" type="text" />
+                            <span asp-validation-for="AuthorMiddleName" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-5 col-sm-padding" style="float:left">
+                            <label asp-for="AuthorLastName" class="col-form-label">&nbsp;</label>
+                            <input asp-for="AuthorLastName" class="form-control" placeholder="Last Name" type="text" />
+                            <span asp-validation-for="AuthorLastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3" style="float:right;height:50px;line-height:32px;padding-top:30px">
+                            <label id="urgent-toggle" class="switch">
+                                <input type="checkbox" asp-for="IsVisible" />
+                                <span class="slider round"></span>
+                            </label>
+                            <label for="urgent-toggle">Flag as Visible</label>
+                        </div>
+                        <div class="col-sm-3" style="float:right;height:50px;line-height:32px;padding-top:30px">
+                            <label id="urgent-toggle" class="switch">
+                                <input type="checkbox" asp-for="IsPinned" />
+                                <span class="slider round"></span>
+                            </label>
+                            <label for="urgent-toggle">Flag as Pinned</label>
+                        </div>
+                        <div class="col-sm-3 col-sm-padding" style="float:left">
+                            <label asp-for="PublishStart" class="col-form-label">Publish Start</label>
+                            <input asp-for="PublishStart" class="form-control" type="date" />
+                            <span asp-validation-for="PublishStart" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-3 col-sm-padding" style="float:left">
+                            <label asp-for="PublishStop" class="col-form-label">Publish End</label>
+                            <input asp-for="PublishStop" class="form-control" type="date" />
+                            <span asp-validation-for="PublishStop" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-padding" style="float:left">
+                            <label asp-for="Headline" class="col-form-label">Headline</label>
+                            <input asp-for="Headline" class="form-control" type="text" />
+                            <span asp-validation-for="Headline" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-padding" style="float:left">
+                            <label asp-for="Article" class="col-form-label"></label>
+                            <textarea asp-for="Article" class="form-control" rows="10" type="text"></textarea>
+                            <span asp-validation-for="Article" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer card-text">
+                    <div style="float:right;width:39%;height:100%;line-height:100%;">
+                        <div style="float:right;height:100%;line-height:100%;">
+                            <a class="btn btn-secondary" asp-action="List" asp-controller="NewsItems"><span class="fa fa-fast-backward"></span> Cancel</a>
+                            <button id="btnSubmit" type="submit" class="btn btn-success" asp-action="Edit" asp-controller="NewsItems"><span class="fa fa-save"></span> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

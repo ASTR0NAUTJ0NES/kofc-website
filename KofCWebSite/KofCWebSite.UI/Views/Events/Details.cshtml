@@ -1,0 +1,26 @@
+@model KofCWebSite.Core.Models.EventDetailsViewModel
+
+<div class="card" style="margin-top:40px;margin-bottom:54px;">
+    <div class="card-header">
+        <h3>@Model.Event.Title</h3>
+        @{
+            if (Model.Event.Location != null)
+            {
+                <h5>Location: @Model.Event.Location</h5>
+            }
+        }
+        @{
+            if (Model.Event.Contact.Firstname != null && Model.Event.Contact.Lastname != null)
+            {
+                <h6>Organizer: @Model.Event.Contact.Firstname @Model.Event.Contact.Lastname</h6>
+            }
+        }
+        <h6>Ongoing from &nbsp;@Model.Event.EventStart &nbsp;until&nbsp; @Model.Event.EventEnd</h6>
+        @{
+            if (Model.Event.Description != null)
+            {
+                <h6>@Model.Event.Description</h6>
+            }
+        }
+    </div>
+</div>

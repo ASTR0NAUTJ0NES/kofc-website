@@ -1,0 +1,94 @@
+@model KofCWebSite.Core.Models.EventEditViewModel
+@{
+    ViewData["Title"] = "Edit Event";
+    string alertMsg = Model.AlertMessage ?? "";
+}
+
+@if (alertMsg != "")
+{
+    <div id="alertRow" class="row">
+        <div class="col-md-10">
+            <p class="alert alert-primary">@alertMsg</p>
+        </div>
+    </div>
+}
+
+<div class="section-header wow fadeInRight" style="visibility:hidden;">
+    <h2><span class="fa fa-calendar-day"></span> @Model.Title</h2>
+</div>
+
+<section id="team" class="wow fadeInUpBig" style="padding-top:0px; margin-bottom:54px;visibility:hidden;">
+    <form name="formEditAnEvent" asp-controller="Events" asp-action="Edit" method="post">
+        <div class="row" style="padding:0;">
+            <div class="card-box-kofc col-lg-12 card shadow">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group" style="margin-bottom:35px;">
+                        <div class="col-sm-6 col-sm-padding" style="float:left;">
+                            <label asp-for="EventTitle" class="col-form-label">Title</label>
+                            <input asp-for="EventTitle" class="form-control" type="text" />
+                            <span asp-validation-for="EventTitle" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-6 col-sm-padding" style="float:left">
+                            <label asp-for="Location" class="col-form-label"></label>
+                            <input asp-for="Location" class="form-control" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 col-sm-padding" style="float:left">
+                            <input asp-for="Address1" class="form-control" placeholder="Address 1" type="text" />
+                        </div>
+                        <div class="col-sm-6 col-sm-padding" style="float:left">
+                            <input asp-for="Address2" class="form-control" placeholder="Address 2" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5 col-sm-padding" style="float:left">
+                            <input asp-for="City" class="form-control" placeholder="City" type="text" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4 col-sm-padding" style="float:left">
+                            <input asp-for="State" class="form-control" placeholder="State" type="text" />
+                            <span asp-validation-for="State" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-3 col-sm-padding" style="float:left">
+                            <input asp-for="Zip" class="form-control" placeholder="Zip" type="text" />
+                            <span asp-validation-for="Zip" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-padding" style="float:left">
+                            <label asp-for="ContactId" class="col-form-label">Event Contact</label>
+                            <select asp-for="ContactId" asp-items="@Model.Contacts" class="form-control"></select>
+                        </div>
+                        <div class="col-sm-4 col-sm-padding" style="float:left">
+                            <label asp-for="EventStart" class="col-form-label">Event Start</label>
+                            <input asp-for="EventStart" class="form-control" placeholder="Event Start" type="date" />
+                            <span asp-validation-for="EventStart" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4 col-sm-padding" style="float:left">
+                            <label asp-for="EventEnd" class="col-form-label">Event End</label>
+                            <input asp-for="EventEnd" class="form-control" placeholder="Event End" type="date" />
+                            <span asp-validation-for="EventEnd" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 col-sm-padding" style="float:left">
+                            <label asp-for="Description" class="col-form-label"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4" type="text"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer card-text">
+                    <div style="float:right;width:39%;height:100%;line-height:100%;">
+                        <div style="float:right;height:100%;line-height:100%;">
+                            <a class="btn btn-secondary" asp-action="List" asp-controller="Events"><span class="fa fa-fast-backward"></span> Cancel</a>
+                            <button id="btnSubmit" type="submit" class="btn btn-success" asp-action="Edit" asp-controller="Events"><span class="fa fa-save"></span> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>

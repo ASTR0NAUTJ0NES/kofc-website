@@ -1,0 +1,45 @@
+@using Microsoft.AspNetCore.Identity
+@using KofCWebSite.Core.Interfaces
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IContactsService _ContactsService
+@{
+    var contact = await _ContactsService.FindContactByEmailAsync(User.Identity.Name);
+    string contactName = contact != null
+            ? contact.Firstname + " " + contact.Lastname
+            : User.Identity.Name;
+
+    string claims = "";
+    foreach (var claim in User.Claims)
+        claims += "-" + claim.Value;
+}
+<section id="topbar" class="d-none d-lg-block">
+    <div class="container clearfix">
+        <div class="contact-info">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="col-sm-6" style="float:left;margin:0;padding:0;">
+                        <a class="kofc-login-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage Profile">Hi <b>@contactName!</b></a>
+                    </div>
+                    <div class="col-sm-6" style="float:right;text-align:right;margin:0;padding:0;">
+                        <button type="submit" style="padding:0; @(SignInManager.IsSignedIn(User) ? "" : "visibility:hidden;")" class="kofc-login-link btn btn-link" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Logout  <i class="fa fa-sign-out-alt" style="color:#50d8af;"></i></button>
+                    </div>
+                }
+                else
+                {
+                    @if (!((string)ViewData["controller"]).Contains("/Account/Login"))
+                    {
+                        <div class="col-sm-6" style="float:left;margin:0;padding:0;"></div>
+                        <div class="col-sm-6" style="float:right;text-align:right;margin:0;padding:0;">
+                            <a class="kofc-login-link" asp-area="Identity" asp-page="/Account/Login">
+                                <i class="fa fa-sign-in-alt" style="color:#50d8af;"></i> Login
+                            </a>
+                        </div>
+                    }
+                }
+            </form>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,114 @@
+@using Microsoft.AspNetCore.Identity
+@using KofCWebSite.Core.Interfaces
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IContactsService _ContactsService
+
+<!DOCTYPE html>
+@{
+    string controller = (string)this.ViewContext.RouteData.Values["controller"] ?? (string)this.ViewContext.RouteData.Values["page"];
+    ViewData["controller"] = controller;
+}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/css/jqx.min.css" rel="stylesheet" />
+    <link href="~/css/reveal.min.css" rel="stylesheet" />
+    <link href="~/css/site-bundle.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800|Montserrat:300,400,700" rel="stylesheet">
+    @RenderSection("Styles", required: false)
+    <script src="https://kit.fontawesome.com/927a1c703a.js" crossorigin="anonymous"></script>
+    <script src="~/js/site-bundle.min.js" asp-append-version="true"></script>
+    <script src="~/js/jqx.min.js" asp-append-version="true"></script>
+    <script src="~/js/reveal.min.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+        var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.trust-provider.com/" : "http://www.trustlogo.com/");
+        document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
+        //]]>
+    </script>
+</head>
+
+<body>
+    <partial name="_LoginPartial" />
+    <header id="header">
+        <div class="container">
+            <div id="logo" class="pull-left">
+                <a asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/home-screen-emblem.png" style="height:46px;padding-right:10px;float:left;" />
+                </a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="home-title-kofc">Fr. O'Kane Council #6538</a>
+                @if (controller != null)
+                {
+                    <nav id="nav-menu-container">
+                        <ul class="nav-menu">
+                            <li class="@(controller == "Home" ? "menu-active" : "")"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="menu-has-children @(controller == "About" ? "menu-active" : "")">
+                                <a>About Us</a>
+                                <ul>
+                                    <li><a asp-controller="About" asp-action="FourPrinciples">Four Principles of The Knights</a></li>
+                                    @*<li><a asp-controller="About" asp-action="CouncilFounders">Council Founders</a></li>*@
+                                    <li><a asp-controller="About" asp-action="History">History of The Knights</a></li>
+                                    <li><a asp-controller="About" asp-action="ContactUs">Contact Us</a></li>
+                                    <li><a asp-controller="About" asp-action="Links">Links</a></li>
+                                    <li class="menu-has-children @(controller == "Join" ? "menu-active" : "")">
+                                        <a>Join Us</a>
+                                        <ul>
+                                            <li><a asp-controller="Join" asp-action="WhyJoin">Why Join?</a></li>
+                                            <li><a asp-controller="Join" asp-action="HowToBecomeAKnight">How to Become a Knight</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-has-children @(controller == "Community" ? "menu-active" : "")">
+                                <a>Community</a>
+                                <ul>
+                                    <li><a asp-controller="Community" asp-action="PrayerRequest">Submit a Prayer Request</a></li>
+                                    @*<li><a asp-controller="Community" asp-action="EventPics">Photo Gallery</a></li>*@
+                                    <li><a asp-controller="Newsletters" asp-action="List">Past Newsletters</a></li>
+                                    <li><a asp-controller="Community" asp-action="NewsList">News</a></li>
+                                </ul>
+                            </li>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="menu-has-children">
+                                    <a>For Members</a>
+                                    <ul>
+                                        <li><a asp-controller="Contacts" asp-action="List">Contacts List</a></li>
+                                        <li><a asp-controller="Events" asp-action="List">Events List</a></li>
+                                        <li><a asp-controller="NewsItems" asp-action="List">News Items List</a></li>
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="margin-top:15px;">
+        <main id="main" role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted fixed-bottom" style="height:60px;background-color:#fff;opacity:0.75;">
+        <div class="container-fluid col-sm-7" style="margin:0;float:left;line-height:60px;">
+            Copyright &copy; @DateTime.Now.Year.ToString() Knights of Columbus Council #6538 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+        </div>
+        <div class="container-fluid col-sm-4" style="margin:0;float:right;text-align:right;">
+            <script language="JavaScript" type="text/javascript">
+                TrustLogo("https://www.okaneknights.org/images/positivessl_trust_seal_md_167x42.png", "CL1", "none");
+            </script>
+            <a href="https://www.instantssl.com/" id="comodoTL">Essential SSL</a>
+        </div>
+    </footer>
+
+    <a href="#" class="back-to-top" style="bottom:72px;"><i class="fa fa-chevron-up"></i></a>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

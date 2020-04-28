@@ -1,0 +1,117 @@
+@model KofCWebSite.Core.Models.ContactUsViewModel
+
+@if (!string.IsNullOrWhiteSpace(Model.AlertMessage))
+{
+    <div id="alertRow" class="row">
+        <div class="col-md-10">
+            <p class="alert alert-primary">@Model.AlertMessage</p>
+        </div>
+    </div>
+}
+<head>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<div class="section-header wow fadeInRight" style="visibility:hidden;">
+    <h2><span class="fa fa-envelope-square"></span> @Model.Title</h2>
+</div>
+
+<section id="contact" class="wow fadeInUp" style="visibility:hidden;">
+      <div class="container">
+        <div class="row contact-info">
+
+          <div class="col-md-4">
+            <div class="contact-address">
+              <i class="fa fa-location-arrow kofc-contactus-icon"></i>
+              <h3>St. Joseph's Catholic Church</h3>
+              <address>2481 Spruce St, Martinsville, VA 24112</address>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-phone">
+              <i class="fa fa-phone kofc-contactus-icon"></i>
+              <h3>Phone Number</h3>
+              <p><a href="tel:+155895548855">(276) 638-4779</a></p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-email">
+              <i class="fa fa-envelope kofc-contactus-icon"></i>
+              <h3>Email</h3>
+              <p><a href="office@stjoe24112.comcastbiz.net">info@example.com</a></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+</section>
+
+<div class="container mb-4">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12801.67351692185!2d-79.82701041561448!3d36.66444049030307!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x885297325e590f97%3A0x17f7a7441401a7fa!2sSt%20Joseph&#39;s%20Catholic%20Church!5e0!3m2!1sen!2sus!4v1587938110563!5m2!1sen!2sus" width="100%" height="380" frameborder="0" style="border:0" allowfullscreen></iframe>
+</div>
+
+<section id="team" class="wow fadeInUpBig" style="padding-top:0px; margin-bottom:54px; visibility:hidden">
+    <form name="formSubmitAContactUsRequest" asp-controller="About" asp-action="ContactUs" method="post">
+
+        <input type="hidden" asp-for="ReCaptchaSiteKey" />
+        <input type="hidden" class="gc-response" asp-for="ReCaptchaResponse" />
+        <div class="row" style="padding:0;">
+            <div class="card-box-kofc col-lg-12 card shadow">
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4" style="float:left">
+                            <input asp-for="ContactUsMessage.FirstName" class="form-control" placeholder="First Name" type="text" />
+                            <span asp-validation-for="ContactUsMessage.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4" style="float:right">
+                            <input asp-for="ContactUsMessage.LastName" class="form-control" placeholder="Last Name" type="text" />
+                            <span asp-validation-for="ContactUsMessage.LastName" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-4" style="float:right">
+                            <input asp-for="ContactUsMessage.Email" class="form-control" placeholder="Email" type="text" />
+                            <span asp-validation-for="ContactUsMessage.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12" style="float:right">
+                            <input asp-for="ContactUsMessage.Subject" class="form-control" placeholder="Subject" type="text" />
+                            <span asp-validation-for="ContactUsMessage.Subject" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12" style="float:left">
+                            <textarea asp-for="ContactUsMessage.MessageDetail" rows="7" class="form-control" placeholder="Message"></textarea>
+                            <span asp-validation-for="ContactUsMessage.MessageDetail" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer card-text">
+                    <div style="float:left;width:60%;height:100%;text-align:left">
+                        <div class="g-recaptcha" data-sitekey="6LdO2OQUAAAAADb3Nim540MD-o81QEZ5UxTGkgDe" data-callback="gcCallBack"></div>
+                    </div>
+                    <div style="float:right;width:39%;height:100%;line-height:100%;">
+                        <div style="float:right;height:100%;line-height:100%;">
+                            <a class="btn btn-secondary" asp-action="Index" asp-controller="Home"><span class="fa fa-fast-backward"></span> Cancel Request</a>
+                            <button id="btnSubmit" class="btn btn-success" type="submit"><span class="fa fa-save"></span> Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <script>
+    $(document).ready(function () {
+        $("#alertRow").fadeOut(5000);
+    });
+
+    var gcCallBack = function (response) {
+        $(".gc-response").val(response);
+    };
+    </script>
+}

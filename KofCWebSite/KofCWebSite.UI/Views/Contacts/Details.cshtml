@@ -1,0 +1,18 @@
+@model KofCWebSite.Core.Models.ContactDetailsViewModel
+
+<div class="card" style="margin-top:40px;margin-bottom:54px;">
+    <div class="card-header">
+        <h3>@Model.Contact.Firstname @Model.Contact.Lastname</h3>
+        <h5>@Model.Contact.Occupation</h5>
+        @{
+            if (Model.Contact.DateOfBirth != null)
+            {
+                TimeSpan age = DateTime.Now.Date - Model.Contact.DateOfBirth.Value;
+                <h5>Age: @(Math.Round(age.Days / 364.5))</h5>
+            }
+        }
+    </div>
+    <div class="card-body">
+        <img src="@Model.Contact.AlbumImage.ToImageSrc()" style="height:150px;" />
+    </div>
+</div>
